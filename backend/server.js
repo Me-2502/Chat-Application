@@ -11,6 +11,7 @@ dotenv.config();
 connectDB();
 const app = express();
 
+app.use(cors());
 app.use(express.json()); // to accept json data
 
 // app.get("/", (req, res) => {
@@ -23,19 +24,19 @@ app.use("/api/message", messageRoutes);
 
 // --------------------------deployment------------------------------
 
-const __dirname1 = path.resolve();
+// const __dirname1 = path.resolve();
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname1, "/frontend/build")));
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static(path.join(__dirname1, "/frontend/build")));
 
-  app.get("*", (req, res) =>
-    res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"))
-  );
-} else {
-  app.get("/", (req, res) => {
-    res.send("API is running..");
-  });
-}
+//   app.get("*", (req, res) =>
+//     res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"))
+//   );
+// } else {
+//   app.get("/", (req, res) => {
+//     res.send("API is running..");
+//   });
+// }
 
 // --------------------------deployment------------------------------
 
@@ -58,37 +59,40 @@ const io = require("socket.io")(server, {
   },
 });
 
-io.on("connection", (socket) => {
-  console.log("Connected to socket.io");
-  socket.on("setup", (userData) => {
-    socket.join(userData._id);
-    socket.emit("connected");
-  });
+// io.on("connection", (socket) => {
+//   console.log("Connected to socket.io");
+//   socket.on("setup", (userData) => {
+//     socket.join(userData._id);
+//     socket.emit("connected");
+//   });
 
-  socket.on("join chat", (room) => {
-    socket.join(room);
-    console.log("User Joined Room: " + room);
-  });
-  socket.on("typing", (room) => socket.in(room).emit("typing"));
-  socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
+//   socket.on("join chat", (room) => {
+//     socket.join(room);
+//     console.log("User Joined Room: " + room);
+//   });
+//   socket.on("typing", (room) => socket.in(room).emit("typing"));
+//   socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
 
-  socket.on("new message", (newMessageRecieved) => {
-    var chat = newMessageRecieved.chat;
+//   socket.on("new message", (newMessageRecieved) => {
+//     var chat = newMessageRecieved.chat;
 
-    if (!chat.users) return console.log("chat.users not defined");
+//     if (!chat.users) return console.log("chat.users not defined");
 
-    chat.users.forEach((user) => {
-      if (user._id == newMessageRecieved.sender._id) return;
+//     chat.users.forEach((user) => {
+//       if (user._id == newMessageRecieved.sender._id) return;
 
-      socket.in(user._id).emit("message recieved", newMessageRecieved);
-    });
-  });
+//       socket.in(user._id).emit("message recieved", newMessageRecieved);
+//     });
+//   });
 
-  socket.off("setup", () => {
-    console.log("USER DISCONNECTED");
-    socket.leave(userData._id);
-  });
+//   socket.off("setup", () => {
+//     console.log("USER DISCONNECTED");
+//     socket.leave(userData._id);
+//   });
+// });
+
+app.get("/api/hello", (req, res) => {
+  res.json({ message: "Hello from Vercel Backend!" });
 });
 
 module.exports = app;
-module.exports.handler = serverless(app);
