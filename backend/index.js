@@ -2,7 +2,7 @@
 import http from 'http';
 
 // Create a server object
-const server = http.createServer((req, res) =&gt; {
+const server = http.createServer((req, res) => {
     // Set the response header
     res.writeHead(200, {'Content-Type': 'text/plain'});
     // Write some text to the response
@@ -13,6 +13,11 @@ const server = http.createServer((req, res) =&gt; {
 const port = 3000;
 
 // Start the server
-server.listen(port, () =&gt; {
+server.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
+
+const serverless = require("serverless-http");
+const app = require("./server"); // Import Express app
+
+module.exports = serverless(app);
