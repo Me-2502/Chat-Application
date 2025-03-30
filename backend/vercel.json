@@ -5,5 +5,13 @@
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "index.js" }
-  ]
+  ],
+  "functions": {
+    "server.js": {
+      "maxDuration": 30
+    },
+    "index.js": {
+      "maxDuration": 30;
+    }
+  }
 }
