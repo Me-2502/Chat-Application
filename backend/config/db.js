@@ -9,9 +9,9 @@ const connectDB = async () => {
     //   useNewUrlParser: true,
     //   useUnifiedTopology: true,
     // });
-    const uri = 'mongodb+srv://22bce257:dl@cluster0.t6y6ilg.mongodb.net/Chat?retryWrites=true&w=majority';
+    const uri = process.env.MONGO_URI;
     const client = new MongoClient(uri);
-    // cachedDb = await mongoose.connect(process.env.MONGO_URI, {
+    // cachedDb = await mongoose.connect(, {
     //   useNewUrlParser: true,
     //   useUnifiedTopology: true,
     //   serverSelectionTimeoutMS: 5000,
